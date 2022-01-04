@@ -24,7 +24,10 @@
     )
 
     if call_response.get("status", False):
-        print("Good job comrade!")	
+        print("Good job comrade!", call_response.get("ucaller_id"))
+    else:
+        # Display error message
+        print(call_response.get("error", None))  
 
-
-
+        # Display error code and Cyrillic decryption
+        print(call_response.get("code"), api.check_error_code(call_response.get("code"))) 
