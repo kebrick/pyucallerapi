@@ -1,7 +1,7 @@
 from re import match
 import requests
 
-from exception import SetSession, SetServiceId, SetKey, ParamSetException, GetException
+from .exception import SetSession, SetServiceId, SetKey, ParamSetException, GetException
 
 
 class BaseUCaller:
@@ -11,8 +11,8 @@ class BaseUCaller:
 
 	def __init__(
 		self,
-		service_id: int = 296227,
-		key: str = "SezKuYbfSaKT8j211ESjTgnlLcyNf4K5",
+		service_id: int,
+		key: str,
 		session: requests.Session = None
 	):
 		"""
@@ -58,6 +58,22 @@ class BaseUCaller:
 		:return: string with url the site uCaller
 		"""
 		return self.__ORG_URL
+
+	@property
+	def base_url(self) -> str:
+		return self.__base_url
+
+	@base_url.setter
+	def base_url(self, url: str):
+		self.__base_url = url
+
+	@property
+	def version_api(self) -> str:
+		return self.__version_api
+
+	@version_api.setter
+	def version_api(self, version: str):
+		self.__version_api = version
 
 	@property
 	def regex_phone(self) -> str:
@@ -170,32 +186,32 @@ class APIUCaller(BaseUCaller):
 		if not self.check_phone(phone=phone):
 			raise ParamSetException(
 				self.__class__.__qualname__,
-				self.init_repeat.__name__,
+				self.init_call.__name__,
 				f"[ERROR] неверный формат телефона \n+79999999999\n79999999999\n9999999999"
 			)
 		if len(code) > 4 or len(code) < 4:
 			raise ParamSetException(
 				self.__class__.__qualname__,
-				self.init_repeat.__name__,
+				self.init_call.__name__,
 				f"[ERROR] Кол-во символов параметра \"code\", больше либо меньше 4"
 			)
 		if client is not None and len(client) > 64:
 			raise ParamSetException(
 				self.__class__.__qualname__,
-				self.init_repeat.__name__,
+				self.init_call.__name__,
 				f"[ERROR] Кол-во символов параметра \"client\", больше 64"
 			)
 		if unique is not None and len(unique) > 64:
 			raise ParamSetException(
 				self.__class__.__qualname__,
-				self.init_repeat.__name__,
+				self.init_call.__name__,
 				f"[ERROR] Кол-во символов параметра \"unique\", больше 64"
 			)
 		phone = self.change_phone(phone)
 		try:
 
 			result = self.session.get(
-				f"{self.__base_url}{self.__version_api}/initCall?service_id={self.service_id}&key={self.key}&phone={phone}" +
+				f"{self.base_url}{self.version_api}/initCall?service_id={self.service_id}&key={self.key}&phone={phone}" +
 				f"&code={code}{f'&client={client}' if client is not None else ''}" +
 				f"{f'&unique={unique}' if unique is not None else ''}",
 				timeout=timeout,
@@ -228,7 +244,7 @@ class APIUCaller(BaseUCaller):
 
 		try:
 			result = self.session.get(
-				f"{self.__base_url}{self.__version_api}/initRepeat?service_id={self.service_id}&key={self.key}&uid={uid}",
+				f"{self.base_url}{self.version_api}/initRepeat?service_id={self.service_id}&key={self.key}&uid={uid}",
 				timeout=timeout
 			)
 			return result.json()
@@ -251,7 +267,7 @@ class APIUCaller(BaseUCaller):
 
 		try:
 			result = self.session.get(
-				f"{self.__base_url}{self.__version_api}/getInfo?service_id={self.service_id}&key={self.key}&uid={uid}",
+				f"{self.base_url}{self.version_api}/getInfo?service_id={self.service_id}&key={self.key}&uid={uid}",
 				timeout=timeout
 			)
 			return result.json()
@@ -259,7 +275,7 @@ class APIUCaller(BaseUCaller):
 		except requests.exceptions.RequestException as err:
 			raise GetException(
 				self.__class__.__qualname__,
-				self.init_repeat.__name__,
+				self.get_info.__name__,
 				f"[ERROR] Не удалось получить развернутую информацию по уже осуществленному uCaller ID\n{err}"
 			)
 
@@ -277,7 +293,7 @@ class APIUCaller(BaseUCaller):
 
 		try:
 			result = self.session.get(
-				f"{self.__base_url}{self.__version_api}/getBalance?service_id={self.service_id}&key={self.key}",
+				f"{self.base_url}{self.version_api}/getBalance?service_id={self.service_id}&key={self.key}",
 				timeout=timeout
 			)
 			return result.json()
@@ -285,7 +301,7 @@ class APIUCaller(BaseUCaller):
 		except requests.exceptions.RequestException as err:
 			raise GetException(
 				self.__class__.__qualname__,
-				self.init_repeat.__name__,
+				self.get_balance.__name__,
 				f"[ERROR] Не удалось получить информацию по остаточному балансу\n{err}"
 			)
 
@@ -303,7 +319,7 @@ class APIUCaller(BaseUCaller):
 
 		try:
 			result = self.session.get(
-				f"{self.__base_url}{self.__version_api}/getService?service_id={self.service_id}&key={self.key}",
+				f"{self.base_url}{self.version_api}/getService?service_id={self.service_id}&key={self.key}",
 				timeout=timeout
 			)
 			return result.json()
@@ -311,7 +327,7 @@ class APIUCaller(BaseUCaller):
 		except requests.exceptions.RequestException as err:
 			raise GetException(
 				self.__class__.__qualname__,
-				self.init_repeat.__name__,
+				self.get_service.__name__,
 				f"[ERROR] Не удалось получить информацию по остаточному балансу\n{err}"
 			)
 

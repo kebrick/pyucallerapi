@@ -6,7 +6,7 @@
 - Python 3.5 or higher.
 
 ### Install
-    pip install pyiikoapi
+    pip install pyucallerapi
 ## Documentation uCaller api: [DOC](https://ucaller.ru/doc)
 ### Example
     from pyucallerapi import APIUCaller
