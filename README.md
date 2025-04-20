@@ -38,10 +38,10 @@ pip install pyucallerapi
 
 Если вам нужно чтобы ответ был в dict - то при инициализации укажите аргумент **return_dict** = True
     
-    api = UCallerAPI(token, return_dict=True)
+    api = UCallerAPI(service_id=service_id,key=key, return_dict=True)
 
     # Либо
-    api = TelefonIpAPI(token,)
+    api = UCallerAPI(service_id=service_id,key=key,)
     api.return_dict = True
 
 # Example
