@@ -18,7 +18,7 @@ from .models import (
 
 NAME = "pyucallerapi"
 __author__ = 'kebrick'
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __email__ = 'ruban.kebr@gmail.com'
 __all__ = (
     UCallerAPI,

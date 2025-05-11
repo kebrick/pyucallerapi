@@ -62,7 +62,8 @@ class BaseAPI:
         base_url: str = None,
         base_headers: dict = None,
         logger: logging.Logger | None = None,
-        return_dict: bool = False
+        return_dict: bool = False,
+        *args,**kwargs
     ):
         """
         :param service_id:Идентификатор сервиса
@@ -128,10 +129,7 @@ class BaseAPI:
     def session_s(self, session: requests.Session = None):
         """Изменение сессии"""
         if session is None:
-            raise SetSession(
-                self.__class__.__qualname__,
-                self.session_s.__name__,
-                f"Не присвоен объект типа requests.Session")
+            raise SetSession(f"Не присвоен объект типа requests.Session")
         else:
             self.__session = session
 
@@ -311,7 +309,8 @@ class BaseAPI:
 
     def health(
         self,
-        timeout=DEFAULT_TIMEOUT
+        timeout=DEFAULT_TIMEOUT,
+        *args,**kwargs
     ) -> HealthModel | ErrorResponseModel:
         """
         Этот метод возвращает информацию по сервису.
@@ -338,7 +337,8 @@ class SettingAPI(BaseAPI):
     # GetServiceModel
     def get_service(
         self,
-        timeout=BaseAPI.DEFAULT_TIMEOUT
+        timeout=BaseAPI.DEFAULT_TIMEOUT,
+        *args,**kwargs
     ) -> GetServiceModel | ErrorResponseModel:
         """
         Этот метод возвращает информацию по сервису.
@@ -362,7 +362,8 @@ class SettingAPI(BaseAPI):
             self.logger.error(f"Ошибка подключения: \n{err}")
     def get_balance(
         self,
-        timeout=BaseAPI.DEFAULT_TIMEOUT
+        timeout=BaseAPI.DEFAULT_TIMEOUT,
+        *args,**kwargs
     ) -> GetBalanceModel | ErrorResponseModel:
         """
         Этот метод возвращает информацию по балансу.
@@ -386,7 +387,8 @@ class SettingAPI(BaseAPI):
             self.logger.error(f"Ошибка подключения: \n{err}")
     def get_account(
         self,
-        timeout=BaseAPI.DEFAULT_TIMEOUT
+        timeout=BaseAPI.DEFAULT_TIMEOUT,
+        *args,**kwargs
     ) -> GetAccountModel | ErrorResponseModel:
         """
         Этот метод возвращает информацию по балансу.
@@ -418,7 +420,8 @@ class CallAPI(BaseAPI):
         unique: str = None,
         voice: bool = False,
         mix: bool = False,
-        timeout=BaseAPI.DEFAULT_TIMEOUT
+        timeout=BaseAPI.DEFAULT_TIMEOUT,
+        *args,**kwargs
     ) -> InitCallModel | ErrorResponseModel:
         """
 		Данный метод позволяет инициализировать авторизацию для пользователя вашего приложения.
@@ -470,7 +473,8 @@ class CallAPI(BaseAPI):
     @deprecated("Метод больше не поддерживается")
     def init_repeat(
         self, uid: str,
-        timeout=BaseAPI.DEFAULT_TIMEOUT
+        timeout=BaseAPI.DEFAULT_TIMEOUT,
+        *args,**kwargs
     ) -> InitRepeatModel | ErrorResponseModel:
         """
 		В случае, если ваш пользователь не получает звонок инициализированный методом initCall, вы можете два раза и
@@ -502,7 +506,8 @@ class CallAPI(BaseAPI):
             self.logger.error(f"Ошибка подключения: \n{err}")
     def get_info(
         self, uid: int,
-        timeout=BaseAPI.DEFAULT_TIMEOUT
+        timeout=BaseAPI.DEFAULT_TIMEOUT,
+        *args,**kwargs
     ) -> GetInfoModel | ErrorResponseModel:
         """
         Этот метод возвращает развернутую информацию по уже осуществленному uCaller ID.
@@ -530,7 +535,8 @@ class CallAPI(BaseAPI):
         self,
         phone: str,
         callback_url: str,
-        timeout=BaseAPI.DEFAULT_TIMEOUT
+        timeout=BaseAPI.DEFAULT_TIMEOUT,
+        *args,**kwargs
     ) -> InboundCallWaitingModel | ErrorResponseModel:
         """
         Метод позволяет организовать верификацию номера телефона по входящему звонку
@@ -559,7 +565,8 @@ class CallAPI(BaseAPI):
     def check_phone(
         self,
         phone: str,
-        timeout=BaseAPI.DEFAULT_TIMEOUT
+        timeout=BaseAPI.DEFAULT_TIMEOUT,
+        *args,**kwargs
     ) -> CheckPhoneModel | ErrorResponseModel:
         """
         Метод позволяет организовать верификацию номера телефона по входящему звонку
